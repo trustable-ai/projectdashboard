@@ -1,0 +1,30 @@
+[
+  {
+    "sessionId": "019fc67d-2271-7c53-a145-0f3d13a7e9c4",
+    "agentId": "pi",
+    "cwd": "/home/nicoletta.guest/workbench/projectdashboardtask",
+    "createdAt": "2026-08-03T07:18:41.906Z",
+    "updatedAt": "2026-08-03T07:18:41.906Z"
+  },
+  {
+    "sessionId": "d4662c3b-1d5c-4388-b2dc-7092a8370fc4",
+    "agentId": "claude",
+    "cwd": "/home/nicoletta.guest/workbench/projectdashboardtask",
+    "createdAt": "2026-08-03T07:18:29.904Z",
+    "updatedAt": "2026-08-03T07:18:29.904Z"
+  },
+  {
+    "sessionId": "019fc675-9f15-7468-9946-14325cd60637",
+    "agentId": "pi",
+    "cwd": "/home/nicoletta.guest/workbench/projectdashboardtask",
+    "createdAt": "2026-08-03T07:10:30.818Z",
+    "updatedAt": "2026-08-03T07:10:30.818Z"
+  },
+  {
+    "sessionId": "019fbdde-651f-7ef6-ac37-47934d695cb5",
+    "agentId": "pi",
+    "cwd": "/home/nicoletta.guest/workbench/projectdashboardtask",
+    "createdAt": "2026-08-01T15:08:21.112Z",
+    "updatedAt": "2026-08-01T15:08:21.112Z"
+  }
+]
