@@ -80,12 +80,3 @@ its indexes and seeds starter tasks exactly once (falling back to seeding Redis
 when Mongo is down), and `v1/mongo-check` is a diagnostic for working out which
 authentication mechanism the Mongo endpoint accepts. Both are safe to re-run.
 
-## Getting started
-
-```bash
-npm install
-npm run dev
-```
-
-The backend needs MongoDB and Redis configured; run the setup action once to
-create the store and seed it. The app opens on the dashboard.
