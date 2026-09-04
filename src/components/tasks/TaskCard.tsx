@@ -11,6 +11,7 @@ interface TaskCardProps {
   onReset?: (task: Task) => void;
   onEdit?: (task: Task) => void;
   onDelete?: (task: Task) => void;
+  onOpen?: (task: Task) => void;
 }
 
 function nextStatusLabel(status: Task["status"]): string {
@@ -19,7 +20,7 @@ function nextStatusLabel(status: Task["status"]): string {
   return "Done";
 }
 
-export function TaskCard({ task, onAdvance, onReset, onEdit, onDelete }: TaskCardProps) {
+export function TaskCard({ task, onAdvance, onReset, onEdit, onDelete, onOpen }: TaskCardProps) {
   return (
     <article className="flex w-full flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5">
       <div className="flex flex-wrap items-center gap-2">
@@ -31,14 +32,33 @@ export function TaskCard({ task, onAdvance, onReset, onEdit, onDelete }: TaskCar
         </span>
       </div>
 
-      <h3 className="text-base font-semibold leading-snug break-words sm:text-lg">
-        {task.title}
-      </h3>
-
-      {task.description && (
-        <p className="text-sm text-muted-foreground break-words line-clamp-3">
-          {task.description}
-        </p>
+      {onOpen ? (
+        <button
+          type="button"
+          onClick={() => onOpen(task)}
+          aria-label={`Open details for ${task.title}`}
+          className="group -mx-1 -my-0.5 flex flex-col gap-2 rounded-md px-1 py-0.5 text-left transition-colors hover:bg-muted/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <h3 className="text-base font-semibold leading-snug break-words group-hover:underline sm:text-lg">
+            {task.title}
+          </h3>
+          {task.description && (
+            <p className="text-sm text-muted-foreground break-words line-clamp-3">
+              {task.description}
+            </p>
+          )}
+        </button>
+      ) : (
+        <>
+          <h3 className="text-base font-semibold leading-snug break-words sm:text-lg">
+            {task.title}
+          </h3>
+          {task.description && (
+            <p className="text-sm text-muted-foreground break-words line-clamp-3">
+              {task.description}
+            </p>
+          )}
+        </>
       )}
 
       <p className="inline-flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">

@@ -11,6 +11,7 @@ import { TaskCard } from "@/components/tasks/TaskCard";
 import { TaskFilters } from "@/components/tasks/TaskFilters";
 import { NewTaskDialog } from "@/components/tasks/NewTaskDialog";
 import { EditTaskDialog } from "@/components/tasks/EditTaskDialog";
+import { TaskDetailDialog } from "@/components/tasks/TaskDetailDialog";
 import { Button } from "@/components/ui/button";
 import type { Task, TaskInput } from "@/types/task";
 
@@ -37,6 +38,8 @@ export function TasksPage({ tasks }: TasksPageProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<Task | null>(null);
   const [editOpen, setEditOpen] = useState(false);
+  const [detailTarget, setDetailTarget] = useState<Task | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
   const [formError, setFormError] = useState<string | undefined>();
 
   function advance(task: Task) {
@@ -50,6 +53,10 @@ export function TasksPage({ tasks }: TasksPageProps) {
     setEditTarget(task);
     setFormError(undefined);
     setEditOpen(true);
+  }
+  function openDetail(task: Task) {
+    setDetailTarget(task);
+    setDetailOpen(true);
   }
   async function handleCreate(input: TaskInput): Promise<{ ok: boolean; error?: string }> {
     setFormError(undefined);
@@ -182,6 +189,7 @@ export function TasksPage({ tasks }: TasksPageProps) {
               onReset={reopen}
               onEdit={openEdit}
               onDelete={(t) => deleteTask(t.id)}
+              onOpen={openDetail}
             />
           ))}
         </section>
@@ -197,6 +205,12 @@ export function TasksPage({ tasks }: TasksPageProps) {
         open={editOpen}
         onOpenChange={setEditOpen}
         onUpdate={handleUpdate}
+      />
+      <TaskDetailDialog
+        task={detailTarget}
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        onEdit={openEdit}
       />
     </div>
   );
