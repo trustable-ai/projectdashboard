@@ -1,1 +1,82 @@
-# Trustable Workspace
+# Project Dashboard Task
+
+A task tracker with a statistics dashboard in front of it: see where the work
+stands, click the number that worries you, and land on exactly those tasks.
+
+Built mobile-first — the same app works from a 320-pixel phone to a wide desktop
+without horizontal scrolling, with a sidebar on desktop and a slide-out drawer on
+mobile.
+
+![Project Dashboard Task](screenshot.png)
+
+## Dashboard
+
+Five cards across the top: **Total**, **Completed** (with the completion
+percentage), **Pending**, **Overdue** and **Completion**. Every one is
+clickable — pressing it takes you to the Tasks page with the matching filter
+already applied and preserved, so "3 overdue" is one tap from the three tasks in
+question.
+
+Below them, two breakdowns — **by priority** and **by category** — showing how
+the work is distributed as proportional bars. Those are clickable too, and filter
+the Tasks page the same way.
+
+Last comes **Upcoming**: the next four unfinished tasks by due date, as cards you
+can act on without leaving the dashboard. Every statistic recalculates itself as
+soon as anything changes.
+
+## Tasks
+
+**Search** across title, description and category, updating as you type. Filter
+by **status** (To Do, In Progress, Completed, or "pending" meaning anything not
+finished), by **priority**, by **category**, and with an **overdue only** toggle.
+Filters combine, and the ones you arrived with from the dashboard stay applied.
+
+Each task shows its title, description, category, due date, and colour-coded
+status and priority badges. Overdue tasks are called out. A task carries a title,
+description, category, priority (low, medium, high), status (To Do, In Progress,
+Completed), a due date and its creation date.
+
+The action on a card advances the task through its lifecycle — **Start** on a
+to-do, **Complete** on one in progress — with **Reopen** to send a finished task
+back. **Edit** opens the full form; **Delete** removes it. New tasks are created
+from a dialog with the same form.
+
+Loading, empty and error states are all explicit: a spinner while the list
+loads, "No tasks match the current search or filters" when nothing does, and a
+readable message when the backend can't be reached. Touch targets are at least
+44 by 44 pixels throughout.
+
+## Where the data comes from
+
+The app tells you. A small label on the dashboard and the Tasks page shows
+whether the list you're looking at came **via mongo**, **via redis**, or was
+**served from cache** — useful when you want to know whether you're seeing fresh
+data or a cached list.
+
+## How it is put together
+
+A React and TypeScript single-page app (Vite, Tailwind CSS, React Router), with
+task operations routed through a single gateway in the services layer so
+creates, updates, deletes and status changes all go through one path.
+
+Behind it is one Python action on Apache OpenServerless:
+
+| Endpoint | Does |
+|---|---|
+| `GET /api/my/v1/tasks` | list and search, with `status`, `priority`, `category`, `q` and `overdue` filters |
+| `POST /api/my/v1/tasks` | create |
+| `PUT /api/my/v1/tasks/<id>` | update |
+| `DELETE /api/my/v1/tasks/<id>` | delete |
+
+**MongoDB** is the primary store. **Redis** does two jobs: it caches list and
+search results for 60 seconds, invalidated on every write, and it acts as a
+complete fallback store — if MongoDB is unreachable, reads and writes switch
+to Redis transparently so the app keeps working rather than failing. Every
+response says which store served it, which is where the UI's badge comes from.
+
+Two supporting actions round it out: `setup/database` creates the collection and
+its indexes and seeds starter tasks exactly once (falling back to seeding Redis
+when Mongo is down), and `v1/mongo-check` is a diagnostic for working out which
+authentication mechanism the Mongo endpoint accepts. Both are safe to re-run.
+
